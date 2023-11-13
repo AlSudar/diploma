@@ -1,8 +1,21 @@
 import * as React from 'react';
 import styles from './index.module.scss';
 import * as cn from 'classnames';
+import { Button, Form, Input } from 'antd';
 
 const Footer = () => {
+  const onFinish = (values: unknown) => {
+    console.log(values);
+  };
+
+  const onFinishFailed = () => {
+    console.log('submit failed form');
+  };
+
+  const onClickButtonTop = () => {
+    window && window.scrollTo(0, 0);
+  };
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
@@ -59,18 +72,43 @@ const Footer = () => {
         </div>
         <div className={styles.footerContentRight}>
           <h3 className={styles.footerContentTitle}>Подписка</h3>
-          <form action='post' className={styles.footerContentRightForm}>
-            <label className={styles.footerContentRightFormLabel}>
-              <span>Будьте в курсе событий</span>
-              <input type='text' />
+          <Form
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            className={styles.footerContentRightForm}
+          >
+            <label
+              htmlFor='email'
+              className={styles.footerContentRightFormLabel}
+            >
+              <span> Будь в курсе событий</span>
+              <Form.Item
+                id='email'
+                name='email'
+                rules={[
+                  {
+                    required: true,
+                    message: (
+                      <span className={styles.footerContentRightFormError}>
+                        Корректно заполните поле с почтой
+                      </span>
+                    ),
+                    pattern: /@/,
+                  },
+                ]}
+                style={{ margin: '0' }}
+              >
+                <Input />
+              </Form.Item>
             </label>
-            <button
+            <Button
+              htmlType='submit'
               type='submit'
               className={styles.footerContentRightFormSubmit}
             >
               Отправить
-            </button>
-          </form>
+            </Button>
+          </Form>
           <h3 className={styles.footerContentTitle}>Подписывайтесь на нас</h3>
           <ul className={styles.footerContentAdressList}>
             <li className={styles.footerContentAdressYouTube}>
@@ -100,7 +138,10 @@ const Footer = () => {
             height={41}
             className={styles.logo}
           />
-          <button className={styles.buttonTop}></button>
+          <button
+            onClick={onClickButtonTop}
+            className={styles.buttonTop}
+          ></button>
           <p className={styles.copyrigth}>2018 WEB</p>
         </div>
       </div>

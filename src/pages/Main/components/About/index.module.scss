@@ -1,0 +1,52 @@
+.aboutWrapper {
+  padding: 144px 0 90px;
+
+  @media screen and (max-width: 800px) {
+    padding: 72px 0 42px;
+  }
+}
+
+.about {
+  max-width: 1350px;
+  padding: 0 10px;
+  margin: 0 auto;
+}
+
+.aboutTitle {
+  margin: 0 0 30px;
+  color: #292929;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: uppercase;
+
+  @media screen and (max-width: 800px) {
+    font-size: 20px;
+    margin: 0 0 18px;
+  }
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #292929;
+  font-weight: 400;
+  font-size: 24px;
+  padding-left: 20px;
+  border-left: 9px solid #ffa800;
+
+  @media screen and (max-width: 800px) {
+    font-size: 18px;
+    padding-left: 14px;
+    border-left: 4px solid #ffa800;
+  }
+}
+
+.description p {
+  margin: 0;
+}
+
+.descriptionBold {
+  font-weight: 700;
+}

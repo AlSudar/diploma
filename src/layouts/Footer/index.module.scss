@@ -14,6 +14,12 @@
   padding: 0 10px;
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
 }
 
 .buttonTop {
@@ -39,6 +45,15 @@
   gap: 190px;
   margin: 0 auto;
   padding: 0 10px 52px;
+
+  @media screen and (max-width: 1200px) {
+    gap: 36px;
+    justify-content: space-between;
+  }
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 }
 
 .footerContentLeft {
@@ -69,6 +84,10 @@
   font-size: 24px;
   font-weight: 400;
   display: block;
+
+  @media screen and (max-width: 600px) {
+    padding-left: 46px;
+  }
 
   &::before {
     content: '';
@@ -117,12 +136,17 @@
   gap: 32px;
   align-items: flex-end;
   margin-bottom: 44px;
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .footerContentRightFormLabel {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  position: relative;
 }
 
 .footerContentRightFormLabel span {
@@ -133,13 +157,23 @@
 
 .footerContentRightFormLabel input {
   padding: 17px 20px;
-  color: #e5e5e5;
   font-size: 24px;
   font-weight: 400;
   border-radius: 3px;
   background: #fff;
-  border: none;
   box-sizing: border-box;
+}
+
+.footerContentRightFormLabel::placeholder {
+  color: #e5e5e5;
+}
+
+.footerContentRightFormError {
+  position: absolute;
+  bottom: -26px;
+  left: 0;
+  font-size: 16px !important;
+  color: red !important;
 }
 
 .footerContentRightFormSubmit {
@@ -161,6 +195,11 @@
   gap: 48px;
   list-style: none;
   padding: 0;
+
+  @media screen and (max-width: 600px) {
+    flex-wrap: wrap;
+    gap: 24px;
+  }
 }
 
 .footerContentAdressYouTube {

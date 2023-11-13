@@ -1,0 +1,9 @@
+.heroForm {
+  background: rgba(41, 41, 41, 0.8);
+  padding: 80px 24px 60px;
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    padding: 40px 12px 30px;
+  }
+}
