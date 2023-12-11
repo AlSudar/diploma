@@ -2,14 +2,38 @@ import * as React from 'react';
 import styles from './index.module.scss';
 import * as cn from 'classnames';
 import { Button, Form, Input } from 'antd';
+import { ModalInfo } from '../../components/ModalInfo';
+import { createPortal } from 'react-dom';
+import { FETCH_URL } from '../../data';
 
 const Footer = () => {
-  const onFinish = (values: unknown) => {
-    console.log(values);
-  };
-
-  const onFinishFailed = () => {
-    console.log('submit failed form');
+  const [showModal, setShowModal] = React.useState(false);
+  const [currentModal, setCurrenModal] = React.useState<{
+    type: 'info' | 'error';
+    title: string;
+  }>(undefined);
+  const [form] = Form.useForm();
+  const onFinish = async (values: { email: string }) => {
+    await fetch(`${FETCH_URL}/subscribe?email=${values.email}`, {
+      method: 'POST',
+      body: JSON.stringify(values),
+    })
+      .then(() =>
+        setCurrenModal({
+          title: 'Все прошло хорошо, спасибо',
+          type: 'info',
+        })
+      )
+      .catch(() =>
+        setCurrenModal({
+          title: 'Произошло непредвиденная ошибка',
+          type: 'error',
+        })
+      )
+      .finally(() => {
+        setShowModal(true);
+        form.resetFields();
+      });
   };
 
   const onClickButtonTop = () => {
@@ -73,8 +97,8 @@ const Footer = () => {
         <div className={styles.footerContentRight}>
           <h3 className={styles.footerContentTitle}>Подписка</h3>
           <Form
+            form={form}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             className={styles.footerContentRightForm}
           >
             <label
@@ -145,6 +169,16 @@ const Footer = () => {
           <p className={styles.copyrigth}>2018 WEB</p>
         </div>
       </div>
+      {showModal &&
+        currentModal &&
+        createPortal(
+          <ModalInfo
+            title={currentModal.title}
+            type={currentModal.type}
+            onClose={() => setShowModal(false)}
+          />,
+          document.body
+        )}
     </footer>
   );
 };

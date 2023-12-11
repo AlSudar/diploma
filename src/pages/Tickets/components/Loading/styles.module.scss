@@ -1,0 +1,95 @@
+.wrapper {
+  padding: 260px 0 340px;
+  background: #3e3c41;
+  position: relative;
+  overflow: hidden;
+}
+
+.wrapperLineLoading {
+  height: 3px;
+  width: 100px;
+  background: #ffa800;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: 0.3s ease-in-out all;
+}
+
+.description {
+  color: #928f94;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0 auto 90px;
+}
+
+.trains {
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  height: 24px;
+  // background: url('/public/svg/Loading/trains.svg') no-repeat center;
+  // background-size: cover;
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 300px;
+    right: 0;
+    bottom: 0;
+    background: #ffca62;
+    animation: 3s infinite alternate rightToLeft;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 286px;
+    height: 16px;
+    left: 0;
+    top: 0;
+    background: url('/public/svg/Loading/trains.svg') no-repeat center;
+    background-size: cover;
+    animation: 3s infinite alternate leftToRight;
+  }
+}
+
+@keyframes leftToRight {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+
+  50% {
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(0);
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes rightToLeft {
+  0% {
+    right: 0;
+    opacity: 0;
+  }
+
+  50% {
+    right: 50%;
+    transform: translateX(50%);
+    opacity: 1;
+  }
+
+  100% {
+    right: 100%;
+    transform: translateX(0);
+    opacity: 0;
+  }
+}

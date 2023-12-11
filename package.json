@@ -36,6 +36,7 @@
     "postcss-preset-env": "9.3.0",
     "sass": "1.69.5",
     "sass-loader": "13.3.2",
+    "svg-inline-loader": "^0.8.2",
     "ts-loader": "9.5.0",
     "typescript": "5.2.2",
     "typescript-plugin-css-modules": "5.0.2",
@@ -46,7 +47,7 @@
   "dependencies": {
     "antd": "5.11.0",
     "classnames": "2.3.2",
-    "dayjs": "^1.11.10",
+    "dayjs": "1.11.10",
     "html-webpack-plugin": "5.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
