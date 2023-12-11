@@ -1,0 +1,11 @@
+.label {
+  margin: 0 0 8px;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 300;
+  display: block;
+
+  @media screen and (max-width: 800px) {
+    font-size: 14px;
+  }
+}

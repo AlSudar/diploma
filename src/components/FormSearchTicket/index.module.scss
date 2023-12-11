@@ -6,6 +6,10 @@
   text-align: right;
 }
 
+.selectError {
+  border: 2px solid red;
+}
+
 .inputError {
   border: 3px solid red;
   border-radius: 12px;
@@ -15,17 +19,6 @@
   cursor: pointer;
   background: transparent;
   border: none;
-}
-
-.heroFormLabel {
-  margin: 0 0 8px;
-  color: #fff;
-  font-size: 26px;
-  font-weight: 300;
-
-  @media screen and (max-width: 800px) {
-    font-size: 18px;
-  }
 }
 
 .heroFormDirectionWrapper {
@@ -47,21 +40,6 @@
   margin: 0;
 }
 
-.heroFormDirection {
-  width: 325px !important;
-  height: 60px !important;
-  font-size: 18px;
-  font-weight: 400;
-
-  input {
-    height: 100% !important;
-  }
-
-  @media screen and (max-width: 800px) {
-    width: 100% !important;
-  }
-}
-
 .heroFormDateWrapper {
   display: flex;
   gap: 40px;
@@ -81,7 +59,8 @@
 
 .heroFormDateItem {
   width: 322px;
-  height: 60px;
+  height: 57px;
+  border-radius: 3px;
 
   @media screen and (max-width: 800px) {
     width: 100%;
@@ -131,6 +110,7 @@
   display: grid;
   gap: 34px;
   grid-template-columns: 1fr 1fr;
+  align-items: flex-end;
 
   @media screen and (max-width: 1400px) {
     grid-template-columns: 1fr;

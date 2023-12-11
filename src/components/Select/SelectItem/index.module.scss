@@ -1,0 +1,10 @@
+.item {
+  color: #292929;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 0 0 10px;
+}
+
+.item:last-of-type {
+  margin: 0;
+}

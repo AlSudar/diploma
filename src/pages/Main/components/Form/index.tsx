@@ -11,8 +11,8 @@ const Form = () => {
 
   const submitForm = () => {
     navigate(
-      `/tickets?departurePoint=${data.departurePoint}&arrivalPoint=${
-        data.arrivalPoint
+      `/tickets?departurePoint=${data.departurePoint.name}&arrivalPoint=${
+        data.arrivalPoint.name
       }&dateArrival=${data.dateArrival}${
         data.dateDeparture ? `&dateDeparture=${data.dateDeparture}` : ''
       }`

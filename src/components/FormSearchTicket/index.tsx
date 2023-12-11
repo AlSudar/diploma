@@ -1,12 +1,16 @@
-import * as React from 'react';
-import styles from './index.module.scss';
-import { DatePicker, Form, Select } from 'antd';
-import { DatePickerIcon, GeoIcon, ReplaceIcon } from './icons/icons';
-import * as cn from 'classnames';
+import { DatePicker, Form } from 'antd';
+import { DatePickerIcon, ReplaceIcon } from './icons/icons';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import * as dayjs from 'dayjs';
 import { FormData } from '../../types/index';
+import { Label } from '../Label';
+import { Select } from '../Select';
+import { SelectItem } from '../Select/SelectItem';
+import styles from './index.module.scss';
+import * as React from 'react';
+import * as cn from 'classnames';
+import * as dayjs from 'dayjs';
+import { FETCH_URL } from '../../data';
 
 const FormSearchTicket = ({
   formType = 'colums',
@@ -21,43 +25,60 @@ const FormSearchTicket = ({
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [errorVisible, setErrorVisible] = React.useState<boolean>(false);
+  const [selectDeparturePointData, setSelectDeparturePointData] =
+    React.useState<[] | { _id: string; name: string }[]>([]);
 
   useEffect(() => {
-    if (searchParams.has('departurePoint')) {
-      setData((prevData) => {
-        return {
-          ...prevData,
-          departurePoint: searchParams.get('departurePoint'),
-        };
-      });
-    }
-
-    if (searchParams.has('arrivalPoint')) {
-      setData((prevData) => {
-        return {
-          ...prevData,
-          arrivalPoint: searchParams.get('arrivalPoint'),
-        };
-      });
-    }
-
-    if (searchParams.has('dateDeparture')) {
-      setData((prevData) => {
-        return {
-          ...prevData,
-          dateDeparture: searchParams.get('dateDeparture'),
-        };
-      });
-    }
-
-    if (searchParams.has('dateArrival')) {
-      setData((prevData) => {
-        return {
-          ...prevData,
-          dateArrival: searchParams.get('dateArrival'),
-        };
-      });
-    }
+    (async function () {
+      if (searchParams.has('departurePoint')) {
+        await fetch(
+          `${FETCH_URL}/routes/cities?name=${searchParams.get(
+            'departurePoint'
+          )}`
+        )
+          .then((res) => res.json())
+          .then((data) =>
+            setData((prevData) => {
+              return {
+                ...prevData,
+                departurePoint: data[0],
+              };
+            })
+          )
+          .catch((e) => console.error(e));
+      }
+      if (searchParams.has('arrivalPoint')) {
+        await fetch(
+          `${FETCH_URL}/routes/cities?name=${searchParams.get('arrivalPoint')}`
+        )
+          .then((res) => res.json())
+          .then((data) =>
+            setData((prevData) => {
+              return {
+                ...prevData,
+                arrivalPoint: data[0],
+              };
+            })
+          )
+          .catch((e) => console.error(e));
+      }
+      if (searchParams.has('dateDeparture')) {
+        setData((prevData) => {
+          return {
+            ...prevData,
+            dateDeparture: searchParams.get('dateDeparture'),
+          };
+        });
+      }
+      if (searchParams.has('dateArrival')) {
+        setData((prevData) => {
+          return {
+            ...prevData,
+            dateArrival: searchParams.get('dateArrival'),
+          };
+        });
+      }
+    })();
   }, []);
 
   const reverseDepartureArrivalPoints = () => {
@@ -68,8 +89,8 @@ const FormSearchTicket = ({
       searchParams.forEach((value: string, key: string) => {
         newParams[key] = value;
       });
-      newParams['arrivalPoint'] = copyDataArrivalPoint;
-      newParams['departurePoint'] = copyDataDeparturePoint;
+      newParams['arrivalPoint'] = copyDataArrivalPoint.name;
+      newParams['departurePoint'] = copyDataDeparturePoint.name;
       setSearchParams(newParams);
 
       setData((prevData) => {
@@ -81,11 +102,6 @@ const FormSearchTicket = ({
       });
     }
   };
-
-  const filterOption = (
-    input: string,
-    option?: { label: string; value: string }
-  ) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   const submitForm = () => {
     if (
@@ -100,17 +116,32 @@ const FormSearchTicket = ({
     }
   };
 
-  const onChangeValueInput = (fieldName: string, fieldValue: string) => {
+  const changeParams = (
+    fieldName: string,
+    fieldValue: { _id: string; name: string } | string
+  ) => {
+    const newParams: { [key: string]: string } = {};
+
+    searchParams.forEach((value: string, key: string) => {
+      newParams[key] = value;
+    });
+    if (typeof fieldValue === 'string') {
+      newParams[fieldName] = fieldValue;
+    } else {
+      newParams[fieldName] = fieldValue.name;
+    }
+    setSearchParams(newParams);
+  };
+
+  const onChangeValueInput = (
+    fieldName: string,
+    fieldValue: { _id: string; name: string } | string
+  ) => {
     setData((prevData) => {
       return { ...prevData, [fieldName]: fieldValue };
     });
 
-    const newParams: { [key: string]: string } = {};
-    searchParams.forEach((value: string, key: string) => {
-      newParams[key] = value;
-    });
-    newParams[fieldName] = fieldValue;
-    setSearchParams(newParams);
+    changeParams(fieldName, fieldValue);
   };
 
   return (
@@ -122,7 +153,7 @@ const FormSearchTicket = ({
             formType === 'row' && styles.inputsWrapperRows
           )}
         >
-          <p className={styles.heroFormLabel}>Направление*</p>
+          <Label text='Направление*' />
           <div
             className={cn(
               styles.heroFormDirectionWrapper,
@@ -130,69 +161,85 @@ const FormSearchTicket = ({
             )}
           >
             <Select
-              value={data && data.departurePoint ? data.departurePoint : ''}
-              showSearch
-              size='large'
-              onChange={(value) => onChangeValueInput('departurePoint', value)}
-              className={cn(
-                styles.heroFormDirection,
-                (!data && errorVisible && styles.inputError) ||
-                  (errorVisible && !data.departurePoint && styles.inputError)
-              )}
-              suffixIcon={<GeoIcon />}
-              placeholder='Откуда поедете'
-              optionFilterProp='children'
-              filterOption={filterOption}
-              options={[
-                {
-                  value: 'jack',
-                  label: 'Jack',
-                },
-                {
-                  value: 'lucy',
-                  label: 'Lucy',
-                },
-                {
-                  value: 'tom',
-                  label: 'Tom',
-                },
-              ]}
-            />
-            <button
+              value={
+                data && data.arrivalPoint && data.arrivalPoint.name
+                  ? data.arrivalPoint.name
+                  : ''
+              }
+              onChange={async (e) => {
+                onChangeValueInput('arrivalPoint', {
+                  _id: '0',
+                  name: e.target.value,
+                });
+                await fetch(`${FETCH_URL}/routes/cities?name=${e.target.value}`)
+                  .then((res) => res.json())
+                  .then((data) => setSelectDeparturePointData(data))
+                  .catch((e) => console.error(e));
+              }}
+              className={
+                (!data && errorVisible && styles.selectError) ||
+                (errorVisible && !data.arrivalPoint && styles.selectError)
+              }
+            >
+              {selectDeparturePointData &&
+                selectDeparturePointData.length > 0 &&
+                selectDeparturePointData.map((item) => {
+                  return (
+                    <SelectItem
+                      text={item.name.toLocaleUpperCase()}
+                      key={item._id}
+                      onChange={() => {
+                        setData((prevData) => {
+                          return { ...prevData, arrivalPoint: item };
+                        });
+                      }}
+                    />
+                  );
+                })}
+            </Select>
+            <div
               className={styles.button}
               onClick={reverseDepartureArrivalPoints}
             >
               <ReplaceIcon />
-            </button>
+            </div>
             <Select
-              value={data && data.arrivalPoint ? data.arrivalPoint : ''}
-              onChange={(value) => onChangeValueInput('arrivalPoint', value)}
-              showSearch
-              size='large'
-              className={cn(
-                styles.heroFormDirection,
-                (!data && errorVisible && styles.inputError) ||
-                  (errorVisible && !data.arrivalPoint && styles.inputError)
-              )}
-              suffixIcon={<GeoIcon />}
-              placeholder='Куда поедете'
-              optionFilterProp='children'
-              filterOption={filterOption}
-              options={[
-                {
-                  value: 'jack',
-                  label: 'Jack',
-                },
-                {
-                  value: 'lucy',
-                  label: 'Lucy',
-                },
-                {
-                  value: 'tom',
-                  label: 'Tom',
-                },
-              ]}
-            />
+              value={
+                data && data.departurePoint && data.departurePoint.name
+                  ? data.departurePoint.name
+                  : ''
+              }
+              onChange={async (e) => {
+                onChangeValueInput('departurePoint', {
+                  _id: '0',
+                  name: e.target.value,
+                });
+                await fetch(`${FETCH_URL}/routes/cities?name=${e.target.value}`)
+                  .then((res) => res.json())
+                  .then((data) => setSelectDeparturePointData(data))
+                  .catch((e) => console.error(e));
+              }}
+              className={
+                (!data && errorVisible && styles.selectError) ||
+                (errorVisible && !data.arrivalPoint && styles.selectError)
+              }
+            >
+              {selectDeparturePointData &&
+                selectDeparturePointData.length > 0 &&
+                selectDeparturePointData.map((item) => {
+                  return (
+                    <SelectItem
+                      text={item.name.toLocaleUpperCase()}
+                      key={item._id}
+                      onChange={() => {
+                        setData((prevData) => {
+                          return { ...prevData, departurePoint: item };
+                        });
+                      }}
+                    />
+                  );
+                })}
+            </Select>
           </div>
         </div>
         <div
@@ -202,16 +249,15 @@ const FormSearchTicket = ({
           )}
         >
           <div>
-            <p className={styles.heroFormLabel}>Дата отправления туда*</p>
+            <Label text='Дата отправления туда*' />
             <DatePicker
+              placeholder='Выберите дату'
               value={
                 data && data.dateArrival ? dayjs(data.dateArrival) : undefined
               }
               suffixIcon={<DatePickerIcon />}
               size='large'
-              onChange={(_, dateString) =>
-                onChangeValueInput('dateArrival', dateString)
-              }
+              onChange={(_id, date) => onChangeValueInput('dateArrival', date)}
               className={cn(
                 styles.heroFormDateItem,
                 (!data && errorVisible && styles.inputError) ||
@@ -220,8 +266,9 @@ const FormSearchTicket = ({
             />
           </div>
           <div>
-            <p className={styles.heroFormLabel}>Дата отправления обратно</p>
+            <Label text='Дата отправления обратно' />
             <DatePicker
+              placeholder='Выберите дату'
               value={
                 data && data.dateDeparture
                   ? dayjs(data.dateDeparture)
@@ -229,9 +276,7 @@ const FormSearchTicket = ({
               }
               suffixIcon={<DatePickerIcon />}
               size='large'
-              onChange={(_, dateString) =>
-                onChangeValueInput('dateDeparture', dateString)
-              }
+              onChange={(_, date) => onChangeValueInput('dateDeparture', date)}
               className={styles.heroFormDateItem}
             />
           </div>
