@@ -4,12 +4,12 @@ import styles from './index.module.scss';
 
 const STEPS = ['Билеты', 'Пассажиры', 'Оплата', 'Проверка'];
 
-const Steps = ({ activeStep }: { activeStep: string }) => {
+const StepsHeader = ({ activeSteps }: { activeSteps: string[] }) => {
   return (
     <header className={styles.header}>
       <ul className={styles.steps}>
         {STEPS.map((item, id) => {
-          const stepIsActive = item === activeStep;
+          const stepIsActive = activeSteps.includes(item);
           return (
             <li
               className={cn(
@@ -29,4 +29,4 @@ const Steps = ({ activeStep }: { activeStep: string }) => {
   );
 };
 
-export { Steps };
+export { StepsHeader };
