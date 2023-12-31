@@ -1,6 +1,7 @@
 @font-face {
   font-family: 'Roboto';
-  src: local('Roboto'), url('./fonts/Roboto/RobotoLight.ttf') format('ttf');
+  src: local('Roboto'),
+    url('./assets/fonts/Roboto/RobotoLight.ttf') format('ttf');
   font-weight: 100;
   font-style: normal;
   font-stretch: normal;
@@ -9,7 +10,8 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: local('Roboto'), url('./fonts/Roboto/RobotoRegular.ttf') format('ttf');
+  src: local('Roboto'),
+    url('./assets/fonts/Roboto/RobotoRegular.ttf') format('ttf');
   font-weight: 300;
   font-style: normal;
   font-stretch: normal;
@@ -18,7 +20,8 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: local('Roboto'), url('./fonts/Roboto/RobotoMedium.ttf') format('ttf');
+  src: local('Roboto'),
+    url('./assets/fonts/Roboto/RobotoMedium.ttf') format('ttf');
   font-weight: 400;
   font-style: normal;
   font-stretch: normal;
@@ -27,7 +30,8 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: local('Roboto'), url('./fonts/Roboto/RobotoThin.ttf') format('ttf');
+  src: local('Roboto'),
+    url('./assets/fonts/Roboto/RobotoThin.ttf') format('ttf');
   font-weight: 500;
   font-style: normal;
   font-stretch: normal;
@@ -36,11 +40,16 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: local('Roboto'), url('./fonts/Roboto/RobotoBold.ttf') format('ttf');
+  src: local('Roboto'),
+    url('./assets/fonts/Roboto/RobotoBold.ttf') format('ttf');
   font-weight: 700;
   font-style: normal;
   font-stretch: normal;
   font-variant: normal;
+}
+
+html {
+  width: 1920px;
 }
 
 body {
@@ -49,4 +58,5 @@ body {
   font-family: 'Roboto', sans-serif;
   min-width: 320px;
   scroll-behavior: smooth;
+  width: 1920px;
 }
